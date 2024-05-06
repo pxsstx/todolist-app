@@ -1,13 +1,38 @@
 'use client'
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'next/navigation';
 
 export default function Page() {
+    const [id, setId] = useState('');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
+    const [task, setTask] = useState('');
+
+    const params = useParams();
+    const dataId = params.id;
+
+    useEffect(() => {
+        // Fetch data by id when component mounts
+        const fetchDataById = async () => {
+            try {
+                const response = await axios.get(`/api/task/${dataId}`);
+                const { title, description } = response.data;
+                setTitle(title);
+                setDescription(description);
+                setTask(response.data[0])
+            } catch (error) {
+                console.error('Error fetching task:', error);
+            }
+        };
+
+        // Check if id is provided and fetch data if available
+
+        fetchDataById();
+
+    }, [id]);
 
     const handleSubmit = async () => {
         if (!title || !description) {
@@ -19,20 +44,19 @@ export default function Page() {
         }
         setIsEmpty(false);
         try {
-            const response = await axios.post('/api/task', {
+            // Send PUT request to update task by id
+            await axios.put(`/api/task/${dataId}`, {
                 title: title,
                 description: description
             });
-            console.log(response.data); // Handle success, e.g., show a success message
-            // Clear the form fields after successful submission
-            setTitle('');
-            setDescription('');
+            // Handle success, e.g., show a success message
             setIsSubmitted(true);
             setTimeout(() => {
                 setIsSubmitted(false);
             }, 3000);
+            window.location.reload();
         } catch (error) {
-            console.error('Error adding task:', error); // Handle error, e.g., show an error message
+            console.error('Error updating task:', error);
         }
     };
 
@@ -42,14 +66,24 @@ export default function Page() {
                 <div className="label">
                     <span className="label-text text-xl">Title :</span>
                 </div>
-                <input type="text" placeholder="Type here" className="input input-bordered w-full text-xl" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <input
+                    type="text"
+                    placeholder={task ? task.title : 'Title'} // Check if task exists before accessing its properties
+                    className="input input-bordered w-full text-xl"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
             </div>
             <div>
                 <div className="label">
                     <span className="label-text text-xl">Description :</span>
                 </div>
-                <textarea className="textarea textarea-bordered w-full h-[300px] resize-none text-xl" placeholder="Bio" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
-            </div>
+                <textarea
+                    className="textarea textarea-bordered w-full h-[300px] resize-none text-xl"
+                    placeholder={task ? task.description : 'Description'} // Check if task exists before accessing its properties
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                ></textarea>            </div>
             <div>
                 <button className="btn btn-info w-full mt-4" onClick={handleSubmit}>Submit</button>
             </div>
@@ -66,7 +100,7 @@ export default function Page() {
                     <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Your purchase has been confirmed!</span>
+                    <span>Your task has been updated!</span>
                 </div>
             )}
         </div>

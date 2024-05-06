@@ -30,7 +30,7 @@ function Navbar() {
     return (
         <div>
             <div className="flex justify-between items-center align-middle mt-10">
-                <h1 className="text-4xl">Task APP</h1>
+                <h1 className="text-4xl text-base-content">Task APP</h1>
                 <div>
                     <button className="btn" onClick={toggleTheme}>
                         {theme == "light" ? <IoMdSunny size={20} /> : <IoMdMoon size={20} />}
