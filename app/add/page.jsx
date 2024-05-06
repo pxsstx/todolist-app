@@ -30,6 +30,7 @@ export default function Page() {
             setIsSubmitted(true);
             setTimeout(() => {
                 setIsSubmitted(false);
+                window.location.href = '/';
             }, 3000);
         } catch (error) {
             console.error('Error adding task:', error); // Handle error, e.g., show an error message

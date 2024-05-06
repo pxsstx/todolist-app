@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'next/navigation';
+import { redirect, useParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Page() {
     const [id, setId] = useState('');
@@ -53,8 +54,9 @@ export default function Page() {
             setIsSubmitted(true);
             setTimeout(() => {
                 setIsSubmitted(false);
+                window.location.href = '/';
             }, 3000);
-            window.location.reload();
+            
         } catch (error) {
             console.error('Error updating task:', error);
         }
