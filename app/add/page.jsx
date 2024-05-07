@@ -43,13 +43,13 @@ export default function Page() {
                 <div className="label">
                     <span className="label-text text-xl">Title :</span>
                 </div>
-                <input type="text" placeholder="Type here" className="input input-bordered w-full text-xl" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <input type="text" placeholder="Title" className="input input-bordered w-full text-xl" value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
             <div>
                 <div className="label">
                     <span className="label-text text-xl">Description :</span>
                 </div>
-                <textarea className="textarea textarea-bordered w-full h-[300px] resize-none text-xl" placeholder="Bio" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+                <textarea className="textarea textarea-bordered w-full h-[300px] resize-none text-xl" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
             </div>
             <div>
                 <button className="btn btn-info w-full mt-4" onClick={handleSubmit}>Submit</button>
